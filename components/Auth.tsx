@@ -1,22 +1,23 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { PasswordInput } from "./PasswordInput";
-import { useRecoilState } from "recoil";
-import authAtom from "@/store/authAtom";
 import { retrieveDecryptedData } from "@/lib/cryptojs";
+import authAtom from "@/store/authAtom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { z } from "zod";
+import { PasswordInput } from "./PasswordInput";
 
 const FormSchema = z.object({
   password: z.string().min(2, {
@@ -32,17 +33,43 @@ export function AuthForm() {
     },
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useRecoilState(authAtom)
+  const [isAuthenticated, setIsAuthenticated] = useRecoilState(authAtom);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  if (isAuthenticated === true) redirect("/wallet");
+  // console.log("isauthentedslkjf:", isAuthenticated);
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Form submitted with data:", data);
-    const decryptedPassword = retrieveDecryptedData('encryptedPassword', data.password)
-    console.log('decryptedPassword:', decryptedPassword);
-    console.log('passwrod', data.password);
-    console.log('isEqual:', decryptedPassword === data.password)
-    
-    setIsAuthenticated(true)
+    const decryptedPassword = retrieveDecryptedData(
+      "encryptedPassword",
+      data.password
+    );
+    console.log("decryptedPassword:", decryptedPassword);
+    console.log("password", data.password);
+    console.log("isEqual:", decryptedPassword === data.password);
+  
+    if (decryptedPassword === data.password) {
+      setIsAuthenticated(true);
+      
+      try {
+        const response = await fetch(
+          "/api/set-cookie?key=isAuthenticated&value=true"
+        );
+  
+        if (!response.ok) {
+          throw new Error('Failed to set cookie');
+        }
+  
+        const cookieData = await response.json();
+        console.log(cookieData);
+      } catch (error) {
+        console.error("Error setting cookie:", error);
+      }
+    } else {
+
+    }
   }
+  
 
   return (
     <Form {...form}>
@@ -54,7 +81,10 @@ export function AuthForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput field={field} placeholder="Enter your password" />
+                <PasswordInput
+                  field={field}
+                  placeholder="Enter your password"
+                />
               </FormControl>
               <FormDescription>
                 This is your public display name.

@@ -46,8 +46,8 @@ export function PasswordInputFrom() {
 
     const encryptedPassword = encryptData(data.Password, data.Password);
     storeEncryptedData('encryptedPassword', encryptedPassword)
-    await fetch('/api/complete-onboarding', { method: 'POST' });
-    router.replace('/wallet');
+    await fetch('/api/set-cookie?key=isOnboarded&value=true');
+    router.replace('/auth');
   }
 
   return (

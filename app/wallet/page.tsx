@@ -1,5 +1,5 @@
 "use client";
-import { useOnboarded } from '@/lib/hook';
+import { useIsAuthenticated, useOnboarded } from '@/lib/hook';
 import { fetchCookies } from '@/lib/utils';
 import authAtom from '@/store/authAtom';
 import { useRouter } from 'next/navigation';
@@ -10,10 +10,14 @@ import { useRecoilValue } from 'recoil';
 function Wallet() {
   const router = useRouter();
   const { isOnboarded } = useOnboarded(); 
+  const {isAuthenticated} = useIsAuthenticated(); 
   const authh = useRecoilValue(authAtom); 
-  console.log('isOnboarded usign hook:', isOnboarded)
+  console.log('isOnboarded usign hook:', isOnboarded);
+  console.log('isAUthenticated usign hook:', isAuthenticated);
+  
 
-  if (isOnboarded === false) router.replace('/');
+  if (isOnboarded === false ) router.replace('/');
+  if (isAuthenticated === false ) router.replace('/auth');
 
   return (
     <div>

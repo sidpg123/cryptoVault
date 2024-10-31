@@ -12,7 +12,7 @@ function LandingPage() {
         </Link>
 
         <Link href={"/importWallet"}>
-          <Button variant={"outline"}>Import Wallet</Button>
+          <Button variant={"default"}>Import Wallet</Button>
         </Link>
 
       </div>
