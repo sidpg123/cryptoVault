@@ -1,6 +1,5 @@
 import LandingPage from "@/components/LandingPage";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 export default async function  Home() {

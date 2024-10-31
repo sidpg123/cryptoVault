@@ -23,6 +23,7 @@ function decryptData(encryptedData: string, password: string): string | null {
         if (!decryptedData) throw new Error("Invalid password");
         return decryptedData;
     } catch (error) {
+        console.log(error);
         alert("Incorrect password. Please try again.");
         return null;
     }

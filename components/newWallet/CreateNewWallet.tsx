@@ -1,12 +1,12 @@
 "use client";
-import { ReactElement, useEffect, useState } from "react";
-import Warning from "./Warning";
-import GeneratePhrase from "./GeneratePhrase";
-import SetPassword from "./SetPassword";
-import { useRecoilState } from "recoil";
+import { useOnboarded } from "@/lib/hook";
 import onboardStepsAtom from "@/store/onboardStepsAtom";
 import { useRouter } from "next/navigation";
-import { useOnboarded } from "@/lib/hook";
+import { ReactElement, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import GeneratePhrase from "./GeneratePhrase";
+import SetPassword from "./SetPassword";
+import Warning from "./Warning";
 
 function CreateNewWallet() {
   const router = useRouter();
@@ -30,10 +30,11 @@ function CreateNewWallet() {
   }, [shouldRedirect, router]);
 
   const steps: ReactElement[] = [
-    <Warning />,
-    <GeneratePhrase />,
-    <SetPassword />,
+    <Warning key="warning" />,
+    <GeneratePhrase key="generatePhrase" />,
+    <SetPassword key="setPassword" />,
   ];
+  
   const [onboardSteps, setOnboardSteps] = useRecoilState(onboardStepsAtom);
 
   const handleNext = () => {

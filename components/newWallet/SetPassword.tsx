@@ -1,6 +1,5 @@
 "use client";
 import onboardStepsAtom from "@/store/onboardStepsAtom";
-import { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { PasswordInputFrom } from "../PassForm";
 
