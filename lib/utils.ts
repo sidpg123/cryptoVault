@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 
-export async function fetchCookies() {
+export async function fetchCookies(key: string) {
   const response = await fetch('/api/get-cookies');
   if (!response.ok) {
     throw new Error('Network response was not ok');

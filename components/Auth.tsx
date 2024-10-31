@@ -13,11 +13,13 @@ import {
 import { retrieveDecryptedData } from "@/lib/cryptojs";
 import authAtom from "@/store/authAtom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { z } from "zod";
 import { PasswordInput } from "./PasswordInput";
+import { useEffect } from "react";
+import { useIsAuthenticated } from "@/lib/hook";
 
 const FormSchema = z.object({
   password: z.string().min(2, {
@@ -32,11 +34,18 @@ export function AuthForm() {
       password: "",
     },
   });
+  const router = useRouter();
+  const [isAuthenticatedatom, setIsAuthenticated] = useRecoilState(authAtom);
+  // const setIsAuthenticated = useSetRecoilState(authAtom);
+  const { isAuthenticated } = useIsAuthenticated();
 
-  const [isAuthenticated, setIsAuthenticated] = useRecoilState(authAtom);
+  useEffect(() => {
+    if (isAuthenticatedatom || isAuthenticated) {
+      router.replace("/wallet");
+    }
+  }, [isAuthenticated, router]);
 
-  if (isAuthenticated === true) redirect("/wallet");
-  // console.log("isauthentedslkjf:", isAuthenticated);
+  console.log("isAuthenticated:", isAuthenticated);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("Form submitted with data:", data);
@@ -47,29 +56,33 @@ export function AuthForm() {
     console.log("decryptedPassword:", decryptedPassword);
     console.log("password", data.password);
     console.log("isEqual:", decryptedPassword === data.password);
-  
+
     if (decryptedPassword === data.password) {
       setIsAuthenticated(true);
-      
+
       try {
         const response = await fetch(
           "/api/set-cookie?key=isAuthenticated&value=true"
         );
-  
+
         if (!response.ok) {
-          throw new Error('Failed to set cookie');
+          throw new Error("Failed to set cookie");
         }
-  
+
         const cookieData = await response.json();
         console.log(cookieData);
+        router.push("/wallet");
       } catch (error) {
         console.error("Error setting cookie:", error);
       }
-    } else {
-
+    } // Inside onSubmit function, under else condition
+    else {
+      form.setError("password", {
+        type: "manual",
+        message: "Incorrect password. Please try again.",
+      });
     }
   }
-  
 
   return (
     <Form {...form}>
