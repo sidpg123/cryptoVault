@@ -1,4 +1,5 @@
 "use client";
+import Navbar from '@/components/Navbar';
 import { useIsAuthenticated, useOnboarded } from '@/lib/hook';
 import { useRouter } from 'next/navigation';
 
@@ -17,6 +18,8 @@ function Wallet() {
 
   return (
     <div>
+      <Navbar />
+      
       <h1>Wallet</h1>
       <p>Is Onboarded: {isOnboarded !== null ? isOnboarded : 'Loading...'}</p>
     </div>

@@ -14,16 +14,16 @@ function CreateNewWallet() {
   const [shouldRedirect, setShouldRedirect] = useState(false); 
 
   useEffect(() => {
-    console.log("Checking isOnboarded value:", isOnboarded);
+    // console.log("Checking isOnboarded value:", isOnboarded);
     if (isOnboarded) {
-      console.log("isOnboarded is true, setting redirect state");
+      // console.log("isOnboarded is true, setting redirect state");
       setShouldRedirect(true);  
     }
   }, [isOnboarded]);
 
   useEffect(() => {
     if (shouldRedirect) {
-      console.log("Redirecting to /wallet after 500ms delay");
+      // console.log("Redirecting to /wallet after 500ms delay");
       // setTimeout(() => router.replace('/wallet'), 50); // Added delay for testing
       router.replace('/wallet')
     }
@@ -41,7 +41,7 @@ function CreateNewWallet() {
     if (onboardSteps < steps.length - 1) {
       setOnboardSteps((prevStep) => prevStep + 1);
     } else {
-      console.log("Onboarding completed!");
+      // console.log("Onboarding completed!");
     }
   };
 

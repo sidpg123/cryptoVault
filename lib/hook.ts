@@ -7,7 +7,7 @@ async function fetchCookie(key: string) {
     throw new Error('Network response was not ok');
   }
   const data = await response.json();
-  console.log('forem fetchCookie function', data)
+  // console.log('forem fetchCookie function', data)
   return data.value;
 }
 
@@ -19,7 +19,7 @@ export function useOnboarded() {
     const checkOnboardingStatus = async () => {
       try {
         const isOnboarded = await fetchCookie('isOnboarded');
-        console.log('isOnboarded inside the hook', isOnboarded)
+        // console.log('isOnboarded inside the hook', isOnboarded)
         setIsOnboarded(isOnboarded);
 
       } catch (error) {
@@ -41,7 +41,7 @@ export function useIsAuthenticated() {
     const checkOnboardingStatus = async () => {
       try {
         const isAuthenticated = await fetchCookie('isAuthenticated');
-        console.log('isAuthenticated inside the hook', isAuthenticated)
+        // console.log('isAuthenticated inside the hook', isAuthenticated)
         setIsAuthenticated(isAuthenticated);
 
       } catch (error) {

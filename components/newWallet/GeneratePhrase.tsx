@@ -14,11 +14,11 @@ function GeneratePhrase() {
   useEffect(() => {
     if (phrase.phrase === '') { // Initialize only if phrase is empty
       const mnemonic = generateMnemonic();
-      console.log('mnemonic', mnemonic);
-      console.log( typeof(mnemonic));
+      // console.log('mnemonic', mnemonic);
+      // console.log( typeof(mnemonic));
       
       const seed = mnemonicToSeedSync(mnemonic);
-      console.log("seed", seed);
+      // console.log("seed", seed);
       
       setPhrase({
         phrase: mnemonic,

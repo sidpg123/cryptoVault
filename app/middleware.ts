@@ -4,7 +4,7 @@
 // export function middleware(req: NextRequest) {
 //     const url = req.nextUrl.clone();
 //     const isOnboarded = req.cookies.get('isOnboarded')?.value === 'true';
-//     console.log('isOnboarding', isOnboarded);
+//     // console.log('isOnboarding', isOnboarded);
     
 //     // If user hasn't onboarded, redirect to onboarding if accessing `/wallet`
 //     if (!isOnboarded && url.pathname === '/wallet') {
@@ -33,18 +33,18 @@ export function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
 
     // Log the cookie for debugging
-    console.log('isOnboarded cookie:', req.cookies.get('isOnboarded')?.value);
+    // console.log('isOnboarded cookie:', req.cookies.get('isOnboarded')?.value);
 
     const isOnboarded = req.cookies.get('isOnboarded')?.value === 'true';
 
     if (!isOnboarded && url.pathname === '/wallet') {
-        console.log("Redirecting to /onboarding because onboarding isn't complete.");
+        // console.log("Redirecting to /onboarding because onboarding isn't complete.");
         url.pathname = '/onboarding';
         return NextResponse.redirect(url);
     }
 
     if (isOnboarded && url.pathname === '/onboarding') {
-        console.log("Redirecting to /wallet because onboarding is complete.");
+        // console.log("Redirecting to /wallet because onboarding is complete.");
         url.pathname = '/wallet';
         return NextResponse.redirect(url);
     }
