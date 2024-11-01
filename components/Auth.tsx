@@ -27,7 +27,13 @@ const FormSchema = z.object({
   }),
 });
 
-export function AuthForm() {
+export function AuthForm({
+  onSuccess,
+  onPasswordSubmit,
+}: {
+  onSuccess: () => void;
+  onPasswordSubmit?: (password: string) => void;
+}) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -59,22 +65,10 @@ export function AuthForm() {
 
     if (decryptedPassword === data.password) {
       setIsAuthenticated(true);
+      
+      onPasswordSubmit && onPasswordSubmit(data.password); // Pass the password to the parent component
+      onSuccess();
 
-      try {
-        const response = await fetch(
-          "/api/set-cookie?key=isAuthenticated&value=true"
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to set cookie");
-        }
-
-        const cookieData = await response.json();
-        console.log(cookieData);
-        router.push("/wallet");
-      } catch (error) {
-        console.error("Error setting cookie:", error);
-      }
     } // Inside onSubmit function, under else condition
     else {
       form.setError("password", {
@@ -86,7 +80,7 @@ export function AuthForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="password"
@@ -99,14 +93,11 @@ export function AuthForm() {
                   placeholder="Enter your password"
                 />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="flex justify-center items-center mx-auto">Submit</Button>
       </form>
     </Form>
   );
